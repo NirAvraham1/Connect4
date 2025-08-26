@@ -1,0 +1,33 @@
+﻿@page
+@model ConnectFourWeb.Pages.UniqueGamesModel
+@{
+    ViewData["Title"] = "Unique Games";
+}
+
+<h2>Games Without Duplicates</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Game Id</th>
+            <th>User</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Duration</th>
+            <th>Result</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var g in Model.Games)
+        {
+            <tr>
+                <td>@g.Id</td>
+                <td>@(g.User?.Username ?? $"UserId {g.UserId}")</td>
+                <td>@g.StartTime.ToString("g")</td>
+                <td>@g.EndTime.ToString("g")</td>
+                <td>@g.Duration.ToString(@"hh\:mm\:ss")</td>
+                <td>@g.Result</td>
+            </tr>
+        }
+    </tbody>
+</table>

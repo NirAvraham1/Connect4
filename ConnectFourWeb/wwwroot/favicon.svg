@@ -1,0 +1,8 @@
+<!-- wwwroot/favicon.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect x="4" y="4" width="56" height="56" rx="14" fill="black"></rect>
+  <circle cx="26" cy="26" r="9" fill="#f59e0b"></circle>
+  <circle cx="38" cy="26" r="9" fill="#ef4444"></circle>
+  <circle cx="26" cy="38" r="9" fill="#ef4444"></circle>
+  <circle cx="38" cy="38" r="9" fill="#f59e0b"></circle>
+</svg>

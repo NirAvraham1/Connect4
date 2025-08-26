@@ -1,0 +1,47 @@
+﻿@page
+@model ConnectFourWeb.Pages.IndexModel
+@{
+    ViewData["Title"] = "Home";
+    var identVal = Model.Identifier.GetValueOrDefault();
+    var isLoggedIn = identVal > 0;
+}
+
+<div class="container py-5">
+    <div class="row align-items-center g-5">
+        <div class="col-12 col-md-6 order-md-1 text-center text-md-start">
+            <div class="d-inline-flex align-items-center gap-2 mb-2">
+                <svg class="brand-logo" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="1" y="1" width="22" height="22" rx="6" fill="var(--brand-primary)" />
+                    <circle cx="9" cy="9" r="3.2" fill="#f59e0b" />
+                    <circle cx="15" cy="9" r="3.2" fill="#ef4444" />
+                    <circle cx="9" cy="15" r="3.2" fill="#ef4444" />
+                    <circle cx="15" cy="15" r="3.2" fill="#f59e0b" />
+                </svg>
+                <h1 class="h2 page-title m-0">Connect Four</h1>
+            </div>
+
+            @if (isLoggedIn)
+            {
+                <p class="text-muted mt-2 mb-4">Ready to play?</p>
+                <div class="d-flex justify-content-center justify-content-md-start gap-2">
+                    <a class="btn btn-success btn-lg px-4"
+                       href="connectfour://start?identifier=@identVal">Play</a>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted mt-2 mb-4">Start by logging in or creating an account.</p>
+                <div class="d-flex justify-content-center justify-content-md-start gap-2">
+                    <a class="btn btn-primary btn-lg px-4" asp-page="/Auth/Login">Login</a>
+                    <a class="btn btn-outline-secondary btn-lg px-4" asp-page="/Auth/Register">Register</a>
+                </div>
+            }
+        </div>
+
+        <div class="col-12 col-md-6 order-md-2 d-flex justify-content-center">
+            <img src="~/background.png"
+                 alt="Connect Four board illustration"
+                 class="img-fluid" />
+        </div>
+    </div>
+</div>

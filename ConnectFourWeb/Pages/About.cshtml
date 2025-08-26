@@ -1,0 +1,34 @@
+﻿@page
+@model ConnectFourWeb.Pages.AboutModel
+@{
+    ViewData["Title"] = "About";
+    var identVal = Model.Identifier.GetValueOrDefault();
+    var hasIdent = identVal > 0;
+}
+
+<div class="py-4">
+    <h1 class="mb-3">About this project</h1>
+    <h5 class="mt-4">Team</h5>
+    <ul>
+        <li><strong>Nir Avraham</strong> 315375782 </li>
+        <li><strong>Daniel Rubinstein</strong> 314621467</li>
+    </ul>
+
+    <h5 class="mt-4">Course / Semester</h5>
+    <ul class="mb-0">
+        <li>Course: .NET Progrmaing 10212</li>
+        <li>Instructor: Arnon Bareket </li>
+        <li>Institution: Afeka </li>
+    </ul>
+
+    <div class="mt-4">
+        @if (hasIdent)
+        {
+            <a class="btn btn-primary" asp-page="/Index" asp-route-Identifier="@identVal">Back</a>
+        }
+        else
+        {
+            <a class="btn btn-primary" asp-page="/Index">Back</a>
+        }
+    </div>
+</div>

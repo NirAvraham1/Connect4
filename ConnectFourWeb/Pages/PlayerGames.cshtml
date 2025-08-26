@@ -1,0 +1,78 @@
+﻿@page
+@using System.Linq
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model ConnectFourWeb.Pages.PlayerGamesModel
+@{
+    ViewData["Title"] = "Games by Player";
+
+    var identVal = Model.Identifier.GetValueOrDefault();
+    var hasIdent = identVal > 0;
+
+    var hasGames = Model.PlayerIdentifier.HasValue
+                   && Model.Games != null
+                   && Model.Games.Count > 0;
+}
+
+<h2 class="mb-3">Games by Player</h2>
+
+<form method="get" class="row g-2 align-items-end" novalidate>
+    @* Preserve Identifier on every request *@
+    @if (hasIdent)
+    {
+        <input type="hidden" name="Identifier" value="@identVal" />
+    }
+
+    <div class="col-sm-6 col-md-4">
+        <label asp-for="PlayerIdentifier" class="form-label"></label>
+        <select asp-for="PlayerIdentifier" class="form-select"
+                asp-items="@(new SelectList(Model.Players, nameof(ConnectFourWeb.Models.User.Identifier), nameof(ConnectFourWeb.Models.User.Username)))">
+            <option value="">-- Select a player --</option>
+        </select>
+        <span asp-validation-for="PlayerIdentifier" class="text-danger"></span>
+    </div>
+
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Show</button>
+    </div>
+
+    <div class="col-12">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    </div>
+</form>
+
+@if (hasGames)
+{
+    <div class="table-responsive mt-4">
+        <table class="table table-sm table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Game Id</th>
+                    <th>User Id (Identifier)</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var g in (Model.Games ?? Enumerable.Empty<ConnectFourWeb.Models.Game>()))
+                {
+                    <tr>
+                        <td>@g.Id</td>
+                        <td>@(g.User?.Identifier)</td>
+                        <td>@g.StartTime</td>
+                        <td>@g.EndTime</td>
+                        <td>@g.Result</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else if (Model.PlayerIdentifier.HasValue)
+{
+    <div class="alert alert-info mt-4">No games found for this player.</div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

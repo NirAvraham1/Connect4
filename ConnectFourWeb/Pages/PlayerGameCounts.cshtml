@@ -1,0 +1,25 @@
+﻿@page
+@model ConnectFourWeb.Pages.PlayerGameCountsModel
+@{
+    ViewData["Title"] = "Player Game Counts";
+}
+
+<h2>Number of Games per Player</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Games Played</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model.Players)
+        {
+            <tr>
+                <td>@p.Username</td>
+                <td>@p.GameCount</td>
+            </tr>
+        }
+    </tbody>
+</table>

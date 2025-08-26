@@ -1,0 +1,77 @@
+﻿@page "{id:int}"
+@model ConnectFourWeb.Pages.Users.DeleteModel
+@{
+    ViewData["Title"] = "Delete User";
+    var identVal = Model.Identifier.GetValueOrDefault();
+    var hasIdent = identVal > 0;
+}
+<h2 class="mb-3">Delete User</h2>
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+@if (!Model.Exists)
+{
+    <div class="alert alert-warning">User not found.</div>
+    @if (hasIdent)
+    {
+        <a class="btn btn-secondary" asp-page="/Players" asp-route-Identifier="@identVal">Back</a>
+    }
+    else
+    {
+        <a class="btn btn-secondary" asp-page="/Players">Back</a>
+    }
+}
+else
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <p><strong>Username:</strong> @Model.Username</p>
+            <p><strong>Identifier:</strong> @Model.UserIdentifier</p>
+            <p class="text-danger mb-0">This action cannot be undone.</p>
+        </div>
+    </div>
+
+    <!-- 1) תן מזהה לטופס -->
+    <form id="deleteForm" method="post" novalidate>
+        <!-- 2) כפתור שאינו submit, נקרא לפונקציה onDeleteClick -->
+        <button type="button" class="btn btn-danger" onclick="onDeleteClick()">Delete</button>
+
+        @* קישור נסתר שמפעיל את הפרוטוקול המותאם (נעדכן href בדינמיות בלחיצה) *@
+        <a id="purgeLink" href="#" style="display:none;">purge</a>
+
+        @if (hasIdent)
+        {
+            <a class="btn btn-secondary ms-2" asp-page="/Players" asp-route-Identifier="@identVal">Cancel</a>
+        }
+        else
+        {
+            <a class="btn btn-secondary ms-2" asp-page="/Players">Cancel</a>
+        }
+    </form>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function onDeleteClick() {
+            // נשתמש ב-UserIdentifier של המשתמש שנמחק (זהות “מי למחוק” מקומית)
+            var ident = '@(Model.UserIdentifier?.ToString() ?? "0")';
+
+            try {
+                if (ident && ident !== '0') {
+                    // 3) עדכן את הקישור הנסתר לכתובת connectfour:// המתאימה ולחץ עליו (user gesture)
+                    var a = document.getElementById('purgeLink');
+                    a.href = 'connectfour://purgeall?identifier=' + encodeURIComponent(ident);
+                    a.click();
+                }
+            } catch (e) {
+                // מתעלמים — אם הדפדפן חוסם/אין אפליקציה מותקנת, נמשיך למחיקה בשרת כרגיל
+            }
+
+            // 4) אחרי השהייה קצרה – הגש את הטופס למחיקת המשתמש בשרת
+            setTimeout(function () {
+                document.getElementById('deleteForm').submit();
+            }, 600); // 600ms לרוב מספיק כדי שהמערכת תתפוס את ה-URI המותאם
+        }
+    </script>
+}

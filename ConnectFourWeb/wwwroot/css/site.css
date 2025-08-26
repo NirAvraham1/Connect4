@@ -1,0 +1,206 @@
+/* לוגו קטן בברנד */
+.brand-logo {
+    width: 28px;
+    height: 28px;
+    display: inline-block;
+}
+
+/* ===== אנימציית Connect Four מינימלית ===== */
+.c4-anim .board {
+    /* 7x6 חורים: כל תא 40px */
+    width: 280px; /* 7 * 40 */
+    height: 240px; /* 6 * 40 */
+    border-radius: 16px;
+    background-color: var(--brand-primary);
+    position: relative;
+    box-shadow: 0 8px 22px rgba(0,0,0,.08);
+    /* "חורים" בלוח ע"י דפוס רקע */
+    background-image: radial-gradient(circle at 20px 20px, #ffffff 0 12px, rgba(255,255,255,0) 13px);
+    background-size: 40px 40px;
+    background-position: 0 0;
+}
+
+/* דיסקים */
+.c4-anim .disc {
+    --d: 26px; /* קוטר דיסק */
+    --col: 0; /* ייקבע ע"י המחלקה d1/d2... */
+    --row: 5;
+    --delay: 0s;
+    --color: #f59e0b;
+    position: absolute;
+    left: calc(var(--col) * 40px + (40px - var(--d)) / 2);
+    top: 8px; /* קו התחלתי */
+    width: var(--d);
+    height: var(--d);
+    border-radius: 50%;
+    background: var(--color);
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,.25), 0 3px 8px rgba(0,0,0,.25);
+    transform: translateY(-100px);
+    opacity: 0;
+    animation: c4-drop 6s var(--delay) ease-in-out infinite;
+    will-change: transform, opacity;
+}
+
+    .c4-anim .disc.red {
+        --color: #ef4444;
+    }
+
+    .c4-anim .disc.yellow {
+        --color: #f59e0b;
+    }
+
+/* ארבעה דיסקים אופקיים בשורה התחתונה (עמודות 1..4, שורה 5) */
+.c4-anim .d1 {
+    --col: 1;
+    --row: 5;
+    --delay: 0.0s;
+}
+
+.c4-anim .d2 {
+    --col: 2;
+    --row: 5;
+    --delay: 0.4s;
+}
+
+.c4-anim .d3 {
+    --col: 3;
+    --row: 5;
+    --delay: 0.8s;
+}
+
+.c4-anim .d4 {
+    --col: 4;
+    --row: 5;
+    --delay: 1.2s;
+}
+
+/* קו זכייה שמופיע רגע אחרי הנפילה */
+.c4-anim .win-line {
+    --win-col: 1; /* נקודת התחלה (אותה שורה כמו הדיסקים) */
+    --win-row: 5;
+    position: absolute;
+    left: calc(var(--win-col) * 40px + 8px);
+    top: calc(var(--win-row) * 40px + 8px + 11px);
+    width: calc(4 * 40px - 16px);
+    height: 4px;
+    background: #22c55e;
+    border-radius: 2px;
+    opacity: 0;
+    animation: c4-win 6s 2.0s ease-in-out infinite;
+    box-shadow: 0 0 0 rgba(34,197,94,0);
+}
+
+/* אנימציות */
+@keyframes c4-drop {
+    0% {
+        transform: translateY(-100px);
+        opacity: 0;
+    }
+
+    12% {
+        opacity: 1;
+    }
+
+    60% {
+        transform: translateY(calc(var(--row) * 40px));
+    }
+
+    70% {
+        transform: translateY(calc(var(--row) * 40px - 6px));
+    }
+    /* באונס קטן */
+    80% {
+        transform: translateY(calc(var(--row) * 40px));
+    }
+
+    95% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-100px);
+        opacity: 0;
+    }
+}
+
+@keyframes c4-win {
+    0%,70% {
+        opacity: 0;
+        transform: scaleX(.95);
+    }
+
+    75%,88% {
+        opacity: 1;
+        transform: scaleX(1);
+        box-shadow: 0 0 12px rgba(34,197,94,.55);
+    }
+
+    92% {
+        opacity: .6;
+    }
+
+    100% {
+        opacity: 0;
+        transform: scaleX(.95);
+        box-shadow: 0 0 0 rgba(34,197,94,0);
+    }
+}
+
+/* מכבד הפחתת אנימציות */
+@media (prefers-reduced-motion: reduce) {
+    .c4-anim .disc, .c4-anim .win-line {
+        animation: none !important;
+        opacity: 1;
+    }
+}
+/* לוגו קטן */
+.brand-logo {
+    width: 28px;
+    height: 28px;
+    display: inline-block;
+}
+
+/* מיכל האיור */
+.c4-illustration {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 320px; /* תואם viewBox */
+    height: 280px;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 12px 28px rgba(0,0,0,.08);
+}
+
+/* הלוח עצמו */
+.board-svg, .board-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 18px;
+}
+
+/* Badge של הלוגו בפינה העליונה */
+.brand-badge {
+    position: absolute;
+    top: -14px;
+    right: -14px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    box-shadow: 0 6px 16px rgba(0,0,0,.18);
+    background: transparent;
+}
+/* תמונת ההירו לצד הלוגין */
+.hero-illustration {
+    max-width: 520px; /* שולט ברוחב המקסימלי */
+    border-radius: 16px;
+    box-shadow: 0 12px 28px rgba(0,0,0,.12);
+    display: block;
+}
+
+@media (max-width: 575.98px) {
+    .hero-illustration {
+        margin-top: 12px;
+    }
+}

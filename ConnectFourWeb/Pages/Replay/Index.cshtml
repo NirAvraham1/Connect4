@@ -1,0 +1,30 @@
+﻿@page
+@model ConnectFourWeb.Pages.Replay.IndexModel
+@{
+    ViewData["Title"] = "Replay";
+    var identVal = Model.Identifier.GetValueOrDefault();
+    var hasIdent = identVal > 0;
+}
+
+<h2 class="mb-3">Local Replay</h2>
+
+@if (hasIdent)
+{
+    <p class="text-muted">Replays run only from the client app (local DB).</p>
+
+    <a id="openReplayBtn"
+       class="btn btn-primary btn-lg"
+       href="connectfour://replay?identifier=@identVal">
+        Open Replay in the App
+    </a>
+
+    <div class="small text-muted mt-2">
+        If nothing happens, ensure the client app is installed and allow the browser to open it.
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        Please <a asp-page="/Auth/Login">login</a> first to get your Identifier.
+    </div>
+}

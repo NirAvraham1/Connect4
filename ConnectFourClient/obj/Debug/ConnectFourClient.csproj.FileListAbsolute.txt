@@ -1,0 +1,12 @@
+C:\Users\user\Desktop\Nir\Afeka\שנה ב\סמסטר ב\פיתוח Dot Net\ConnectFour\ConnectFourClient\bin\Debug\ConnectFourClient.exe.config
+C:\Users\user\Desktop\Nir\Afeka\שנה ב\סמסטר ב\פיתוח Dot Net\ConnectFour\ConnectFourClient\bin\Debug\ConnectFourClient.exe
+C:\Users\user\Desktop\Nir\Afeka\שנה ב\סמסטר ב\פיתוח Dot Net\ConnectFour\ConnectFourClient\bin\Debug\ConnectFourClient.pdb
+C:\Users\user\Desktop\Nir\Afeka\שנה ב\סמסטר ב\פיתוח Dot Net\ConnectFour\ConnectFourClient\bin\Debug\Newtonsoft.Json.dll
+C:\Users\user\Desktop\Nir\Afeka\שנה ב\סמסטר ב\פיתוח Dot Net\ConnectFour\ConnectFourClient\bin\Debug\Newtonsoft.Json.xml
+C:\Users\user\Desktop\Nir\Afeka\שנה ב\סמסטר ב\פיתוח Dot Net\ConnectFour\ConnectFourClient\obj\Debug\ConnectFourClient.csproj.AssemblyReference.cache
+C:\Users\user\Desktop\Nir\Afeka\שנה ב\סמסטר ב\פיתוח Dot Net\ConnectFour\ConnectFourClient\obj\Debug\ConnectFourClient.Properties.Resources.resources
+C:\Users\user\Desktop\Nir\Afeka\שנה ב\סמסטר ב\פיתוח Dot Net\ConnectFour\ConnectFourClient\obj\Debug\ConnectFourClient.csproj.GenerateResource.cache
+C:\Users\user\Desktop\Nir\Afeka\שנה ב\סמסטר ב\פיתוח Dot Net\ConnectFour\ConnectFourClient\obj\Debug\ConnectFourClient.csproj.CoreCompileInputs.cache
+C:\Users\user\Desktop\Nir\Afeka\שנה ב\סמסטר ב\פיתוח Dot Net\ConnectFour\ConnectFourClient\obj\Debug\ConnectF.457F049A.Up2Date
+C:\Users\user\Desktop\Nir\Afeka\שנה ב\סמסטר ב\פיתוח Dot Net\ConnectFour\ConnectFourClient\obj\Debug\ConnectFourClient.exe
+C:\Users\user\Desktop\Nir\Afeka\שנה ב\סמסטר ב\פיתוח Dot Net\ConnectFour\ConnectFourClient\obj\Debug\ConnectFourClient.pdb

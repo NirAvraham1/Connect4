@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Connect Four</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="icon" type="image/svg+xml" href="~/favicon.svg" />
+
+</head>
+<body>
+    @{
+        var identStr = Context?.Request?.Query["Identifier"].ToString();
+        int identVal;
+        bool hasIdent = int.TryParse(identStr, out identVal) && identVal > 0;
+    }
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+            <div class="container">
+                @if (hasIdent)
+                {
+                    <a class="navbar-brand fw-semibold" asp-page="/Index" asp-route-Identifier="@identVal">Connect Four</a>
+                }
+                else
+                {
+                    <a class="navbar-brand fw-semibold" asp-page="/Index">Connect Four</a>
+                }
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                        aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                        @if (!hasIdent)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Auth/Register">Register</a>
+                            </li>
+                        }
+
+                        @if (hasIdent)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Players</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-page="/Players" asp-route-Identifier="@identVal">All Players</a></li>
+                                    <li><a class="dropdown-item" asp-page="/PlayersLastGame" asp-route-Identifier="@identVal">Names & Last Game</a></li>
+                                    <li><a class="dropdown-item" asp-page="/PlayersByCountry" asp-route-Identifier="@identVal">By Country</a></li>
+                                    <li><a class="dropdown-item" asp-page="/PlayerGameCounts" asp-route-Identifier="@identVal">Player Game Counts</a></li>
+                                    <li><a class="dropdown-item" asp-page="/PlayerGameGroups" asp-route-Identifier="@identVal">Grouped Player Stats</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Games</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-page="/Games" asp-route-Identifier="@identVal">All Games</a></li>
+                                    <li><a class="dropdown-item" asp-page="/UniqueGames" asp-route-Identifier="@identVal">Unique Games</a></li>
+                                    <li><a class="dropdown-item" asp-page="/Replay/Index" asp-route-Identifier="@identVal">Replays</a></li>
+                                    <li><a class="dropdown-item" asp-page="/PlayerGames" asp-route-Identifier="@identVal">Games by Player</a></li>
+                                </ul>
+                            </li>
+                        }
+
+                        <li class="nav-item">
+                            @if (hasIdent)
+                            {
+                                <a class="nav-link" asp-page="/About" asp-route-Identifier="@identVal">About</a>
+                            }
+                            else
+                            {
+
+                                <a class="nav-link" asp-page="/About">About</a>
+                            }
+                        </li>
+
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto">
+                        @if (hasIdent)
+                        {
+                            <li class="nav-item me-2">
+                                <span class="navbar-text">ID: @identVal</span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-outline-light btn-sm" href="@($"connectfour://start?identifier={identVal}")">Play</a>
+                            </li>
+                            <li class="nav-item ms-2">
+                                <a class="btn btn-light btn-sm" asp-page="/Index">Logout</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="btn btn-outline-light btn-sm" asp-page="/Auth/Login">Login</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="py-4">
+        <div class="container">
+            <partial name="_Flash" />
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="border-top py-3">
+        <div class="container small text-muted d-flex justify-content-between">
+            <span>© @DateTime.UtcNow.Year Connect Four</span>
+            <span></span>
+        </div>
+    </footer>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

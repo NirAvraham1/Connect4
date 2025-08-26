@@ -1,0 +1,34 @@
+﻿@page
+@model ConnectFourWeb.Pages.PlayersLastGameModel
+@{
+    ViewData["Title"] = "Players – Last Game Date";
+}
+
+<h2>Players &amp; Last Game</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Last Game Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model.Players)
+        {
+            <tr>
+                <td>@p.Username</td>
+                <td>
+                    @if (p.LastGameDate.HasValue)
+                    {
+                        @p.LastGameDate.Value.ToString("g")
+                    }
+                    else
+                    {
+                        <em>No games</em>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

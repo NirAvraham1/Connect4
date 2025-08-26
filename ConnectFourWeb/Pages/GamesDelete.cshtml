@@ -1,0 +1,84 @@
+﻿@page "{id:int}"
+@model ConnectFourWeb.Pages.GamesDeleteModel
+@{
+    ViewData["Title"] = "Delete Game";
+    var identVal = Model.Identifier.GetValueOrDefault();
+    var hasIdent = identVal > 0;
+}
+
+<h2 class="mb-3">Delete Game</h2>
+
+@if (Model.DidDelete)
+{
+    <div class="alert alert-success">Game @Model.GameId was deleted from the server.</div>
+
+    @if (hasIdent)
+    {
+        <p class="mb-3">
+            We’ll also remove local replays on this computer to keep things in sync.
+        </p>
+
+        <!-- קישור ידני להפעלה, בנוסף להרצה האוטומטית -->
+        <a class="btn btn-danger"
+           href="connectfour://purge?identifier=@identVal&serverGameId=@Model.GameId">
+            Remove local replays on this PC
+        </a>
+
+        <a class="btn btn-secondary ms-2"
+           asp-page="/Games"
+           asp-route-Identifier="@identVal">Back to Games</a>
+
+        <script>
+            location.href = 'connectfour://purge?identifier=@identVal&serverGameId=@Model.GameId';
+        </script>
+    }
+    else
+    {
+        <div class="alert alert-warning mt-3">
+            Couldn’t determine your Identifier. Log in and try again.
+        </div>
+        <a class="btn btn-secondary" asp-page="/Games">Back</a>
+    }
+}
+else if (!Model.Exists)
+{
+    <div class="alert alert-warning">Game with id @Model.GameId was not found.</div>
+    @if (hasIdent)
+    {
+        <a class="btn btn-secondary" asp-page="/Games" asp-route-Identifier="@identVal">Back</a>
+    }
+    else
+    {
+        <a class="btn btn-secondary" asp-page="/Games">Back</a>
+    }
+}
+else
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <p><strong>Game Id:</strong> @Model.GameId</p>
+            <p><strong>Player Identifier:</strong> @Model.UserIdentifier</p>
+            <p><strong>Start:</strong> @Model.StartTime</p>
+            <p><strong>End:</strong> @Model.EndTime</p>
+            <p><strong>Result:</strong> @Model.Result</p>
+            <p class="text-danger mb-0">This action cannot be undone.</p>
+        </div>
+    </div>
+
+    <form method="post" novalidate>
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+        <button type="submit" class="btn btn-danger">Delete</button>
+        @if (hasIdent)
+        {
+            <a class="btn btn-secondary ms-2" asp-page="/Games" asp-route-Identifier="@identVal">Cancel</a>
+        }
+        else
+        {
+            <a class="btn btn-secondary ms-2" asp-page="/Games">Cancel</a>
+        }
+    </form>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

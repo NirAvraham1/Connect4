@@ -1,0 +1,50 @@
+﻿@page
+@model ConnectFourWeb.Pages.PlayersModel
+@{
+    ViewData["Title"] = "All Players";
+
+    var identVal = Model.Identifier.GetValueOrDefault();
+    var hasIdent = identVal > 0;
+}
+
+<h2>All Players</h2>
+
+<table class="table table-sm table-hover align-middle">
+    <thead class="table-light">
+        <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Country</th>
+            <th>Phone</th>
+            <th>Identifier</th>
+            <th style="width:1%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model.Players)
+        {
+            <tr>
+                <td>@u.Id</td>
+                <td>@u.Username</td>
+                <td>@u.Country</td>
+                <td>@u.Phone</td>
+                <td>@u.Identifier</td>
+                <td class="text-nowrap">
+                    @if (hasIdent && u.Identifier == identVal)
+                    {
+                        <a class="me-2" asp-page="/Users/Edit"
+                           asp-route-id="@u.Id"
+                           asp-route-Identifier="@identVal">Edit</a>
+                    }
+
+                    @if (hasIdent && u.Identifier == identVal)
+                    {
+                        <a class="text-danger" asp-page="/Users/Delete"
+                           asp-route-id="@u.Id"
+                           asp-route-Identifier="@identVal">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

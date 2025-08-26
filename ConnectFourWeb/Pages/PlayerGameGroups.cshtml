@@ -1,0 +1,52 @@
+﻿@page
+@model ConnectFourWeb.Pages.PlayerGameGroupsModel
+@{
+    ViewData["Title"] = "Players by Games Played";
+}
+
+<h2>Players by Number of Games</h2>
+
+@foreach (var grp in Model.Groups)
+{
+    <h3>
+        @if (grp.GameCount > 0)
+        {
+            <text>Played @grp.GameCount games (@grp.Players.Count players)</text>
+        }
+        else
+        {
+            <text>Did not play (0 games) (@grp.Players.Count players)</text>
+        }
+    </h3>
+
+    @if (grp.Players.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Username</th>
+                    <th>Country</th>
+                    <th>Phone</th>
+                    <th>Identifier</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in grp.Players)
+                {
+                    <tr>
+                        <td>@p.Id</td>
+                        <td>@p.Username</td>
+                        <td>@p.Country</td>
+                        <td>@p.Phone</td>
+                        <td>@p.Identifier</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p><em>No players in this group.</em></p>
+    }
+}

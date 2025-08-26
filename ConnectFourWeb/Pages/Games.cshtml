@@ -1,0 +1,47 @@
+﻿@page
+@model ConnectFourWeb.Pages.GamesModel
+@{
+    ViewData["Title"] = "All Games";
+
+    var identVal = Model.Identifier.GetValueOrDefault();
+    var hasIdent = identVal > 0;
+}
+
+<h2 class="mb-3">All Games</h2>
+
+<table class="table table-sm table-hover align-middle">
+    <thead class="table-light">
+        <tr>
+            <th>Game Id</th>
+            <th>User Identifier</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Result</th>
+            <th style="width:1%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var g in Model.Games)
+        {
+            <tr>
+                <td>@g.Id</td>
+                <td>@(g.User?.Identifier)</td>
+                <td>@g.StartTime</td>
+                <td>@g.EndTime</td>
+                <td>@g.Result</td>
+                <td class="text-nowrap">
+                    @* Delete only if the game belongs to the logged-in user *@
+                    @if (hasIdent && g.User?.Identifier == identVal)
+                    {
+                        <a class="btn btn-sm btn-outline-danger"
+                           asp-page="/GamesDelete"
+                           asp-route-id="@g.Id"
+                           asp-route-Identifier="@identVal">
+                            Delete
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

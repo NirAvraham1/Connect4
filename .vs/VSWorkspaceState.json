@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\ConnectFourClient",
+    "\\ConnectFourClient\\LocalReplay",
+    "\\ConnectFourWeb",
+    "\\ConnectFourWeb\\Controllers",
+    "\\ConnectFourWeb\\Pages",
+    "\\ConnectFourWeb\\Pages\\Auth"
+  ],
+  "SelectedNode": "\\ConnectFour.sln",
+  "PreviewInSolutionExplorer": false
+}
