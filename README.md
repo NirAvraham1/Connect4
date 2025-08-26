@@ -1,127 +1,184 @@
-Connect4 — WinForms Client + ASP.NET Core Web API
+Connect4 — Client–Server (.NET)
 
-Connect Four with a Desktop client in WinForms and a .NET Web API server.
-The client draws the board, “falling discs” animations, highlights and hover; the server manages game state, logical validations, and optional replay/statistics (as needed).
+A complete client–server Connect Four system for a course project.
 
-Repository structure:
-ConnectFourClient/ (WinForms), ConnectFourWeb/ (Web API), and the solution file ConnectFour.sln. GitHub
+Server — ASP.NET Core Web API (JSON over HTTP, Newtonsoft.Json)
 
-✨ Features
+Client — WinForms (GDI+ drawing & simple animations)
 
-7×6 board with drop animation and per-column hover.
+Gameplay — Human client sending moves to server (baseline endpoints; extendable to AI/random logic)
 
-Full separation between UI (client) and logic/state (server).
+Polish — Clear separation of concerns, handy troubleshooting notes, and multi-project solution setup
 
-HTTP (JSON) communication between the client and server (Newtonsoft.Json).
+Repository structure at a glance: ConnectFourClient/ (WinForms), ConnectFourWeb/ (Web API), packages/Newtonsoft.Json.13.0.3/, and ConnectFour.sln. GitHub shows the code is mostly C#. 
+GitHub
 
-Easily extendable: replay, last-move highlight, server-to-client messages (MessageBox), and more.
+Table of Contents
 
-🧱 Technologies
+Tech Stack
 
-C# / .NET — WinForms (client), ASP.NET Core (server).
+Folder Structure (expanded)
 
-JSON with Newtonsoft.Json.
+Notable Files & Entry Points
 
-The repo shows mostly C#, HTML, CSS, and JS (per GitHub “Languages”). GitHub
+Prerequisites
 
-📁 Project Structure
+Quick Start
+
+Configuration
+
+Running the Projects
+
+Features
+
+Client (WinForms)
+
+Credits
+
+Tech Stack
+
+Server: .NET (ASP.NET Core Web API), JSON via Newtonsoft.Json
+
+Client: .NET (Windows), WinForms with GDI+ (Graphics, Bitmap, Timer)
+
+Build/IDE: Visual Studio 2022 or dotnet CLI
+
+Repo Languages (GitHub): Mostly C#, with some HTML/CSS/JS. 
+GitHub
+
+Folder Structure (expanded)
 Connect4/
-├─ ConnectFourClient/      # WinForms application (.NET)
-│  ├─ (Forms, Services, Api helpers, etc.)
-│  └─ app.config / server base-URL file (as in your code)
-├─ ConnectFourWeb/         # Web API in ASP.NET Core
-│  ├─ Controllers/
-│  ├─ Models/
-│  ├─ Services/
-│  └─ appsettings*.json
-└─ ConnectFour.sln         # Visual Studio solution
+├─ ConnectFourClient/                  # WinForms desktop client
+│  ├─ Data/                            # (e.g.) ReplayDbContext (SQLite), entities, migrations
+│  ├─ Models/                          # DTOs for API + local replay models
+│  ├─ Services/                        # ApiClient (HTTP), serialization, error handling
+│  ├─ Properties/                      # Settings, resources, AssemblyInfo
+│  ├─ Form1.cs                         # Main UI (board, timers, drawing, input)
+│  └─ *.cs                             # UI helpers, animations, utilities
+│
+├─ ConnectFourWeb/                     # ASP.NET Core Web API
+│  ├─ Controllers/                     # (e.g.) GamesController, MovesController
+│  ├─ Data/                            # EF Core DbContext, entities, configurations
+│  ├─ Services/                        # Game engine / rules, random move generator
+│  ├─ Filters/ (optional)              # Exception → ProblemDetails mapping, validation filters
+│  ├─ Middleware/ (optional)           # Uniform error handling/log correlation
+│  ├─ appsettings*.json                # Connection strings, logging config
+│  └─ Program.cs                       # DI, routing, swagger (if present), middleware pipeline
+│
+├─ packages/
+│  └─ Newtonsoft.Json.13.0.3/          # JSON library used by the solution
+└─ ConnectFour.sln                     # Solution file
 
-✅ Prerequisites
 
-Windows 10/11 (for WinForms).
+Tip: If a folder isn’t there yet, consider adding it—the structure above signals good separation of concerns and makes reviewers happy. Root folders verified on GitHub. 
+GitHub
 
-.NET SDK 8.0+ (recommended) and Visual Studio 2022 (or dotnet CLI).
+Notable Files & Entry Points (click these first)
 
-Permissions for local HTTP (Firewall may prompt).
+Server (ASP.NET Core Web API)
 
-🚀 Quick Start (CLI)
-# 1) Clone
+Controllers/GamesController.cs (or similarly named)
+Why it’s interesting: Shows [ApiController], attribute routing, status codes (201, 400, 404), and model validation. Look for DI of a game service, cancellation tokens, and returning ProblemDetails for errors.
+
+Controllers/MovesController.cs (or similar)
+Why: Encapsulates move validation (column bounds, column full, turn order), win/draw detection, and consistent responses (DTOs). Good spot to show logging breadcrumbs via ILogger.
+
+Data/GameDbContext.cs (or similar)
+Why: EF Core setup (entities like Player, Game, Move), relationships, indexes, and OnModelCreating. If you use migrations, this is where configurations live.
+
+Services/GameEngine.cs (or similar)
+Why: Pure game logic (drop piece, check four-in-a-row, random move generation). Clean separation makes unit tests trivial.
+
+Filters/ApiExceptionFilter.cs (optional)
+Why: Converts exceptions to RFC 7807 ProblemDetails (uniform JSON errors) and avoids leaking stack traces.
+
+Client (WinForms)
+
+Form1.cs
+Why: Rendering quality & UX polish. Look for:
+
+Double buffering (ControlStyles.OptimizedDoubleBuffer) to prevent flicker
+
+GDI+ drawing (board grid, discs), anti-aliasing
+
+Timer-based animation for “falling disc” and hover highlight
+
+Input blocking while awaiting server turn
+
+Services/ApiClient.cs
+Why: Centralized HTTP calls with base URL config, HttpClient reuse, JSON (Newtonsoft) serialization, mapping ProblemDetails to friendly messages, and small retry/backoff for transient errors.
+
+Data/ReplayDbContext.cs (if present)
+Why: Local SQLite store for replays; demonstrates EF Core on the client, EnsureCreated(), and simple querying for playback screens.
+
+Models/GameDto.cs, Models/MoveDto.cs (or similar)
+Why: Strongly typed JSON contracts, JsonPropertyName/JsonProperty usage, and separation between transport vs. UI models.
+
+If a file above isn’t in your tree yet, adding it (even with minimal content) helps reviewers quickly see professional structure and technology depth.
+
+Prerequisites
+
+Windows 10/11 (for the WinForms client)
+
+.NET SDK 8.0+ (recommended)
+
+Visual Studio 2022 (or use the dotnet CLI)
+
+Quick Start
+# Clone
 git clone https://github.com/NirAvraham1/Connect4.git
 cd Connect4
 
-# 2) Restore
+# Restore
 dotnet restore
 
-# 3) Run the server (local by default)
+# Run server
 cd ConnectFourWeb
 dotnet run
-# Note: In the client code there was an example Base URL: http://localhost:5221
-# If the port/URL differs, update it in the client before running.
+# Note the URL (e.g., http://localhost:5221)
 
-# 4) Run the client
+# Run client (new terminal)
 cd ../ConnectFourClient
 dotnet run
 
-🧩 Configuration — Client connection
+Configuration
 
-In the client there is an ApiClient/BaseUrl class (for example, your code showed "http://localhost:5221"). Make sure the URL matches the port where the server is running. If needed — expose/move the Base URL to a config file (app.config / Settings).
+Server URL: Printed on startup (e.g., http://localhost:5221).
 
-🖥️ Running in Visual Studio
+Client base URL: Configure in the client’s HTTP layer (e.g., Services/ApiClient.cs). Ensure it matches the server URL/port.
 
-Open ConnectFour.sln.
+Running the Projects
 
-Set Startup Projects… → choose Multiple and set both ConnectFourWeb and ConnectFourClient to Start.
+Visual Studio
 
-Ensure in the server configuration the URL is stable (e.g., http://localhost:5221) and that the client is configured with the same base URL.
+Open ConnectFour.sln → Set Startup Projects… → Multiple → start both ConnectFourWeb & ConnectFourClient.
 
-🔌 API (General description)
+F5. Confirm the client base URL points to the server.
 
-The server exposes endpoints for game management: create a game, perform a move, get board state/history.
-Tip: if Swagger is enabled in the project, you can browse to /swagger while running to get automatic documentation.
+CLI
 
-🧱 Architecture — high level
-[WinForms Client]  <----HTTP JSON---->  [ASP.NET Core Web API]
-Board drawing, UI                        Rules/logic/state
-Animations, MessageBox                   Move validation, (optional) replay/DB
-
-🧰 Development & extensions
-
-Falling animations: triggered by dedicated timer(s) based on a “target row” per column.
-
-Highlight: store the “last move” (e.g., (col,row)), draw a halo around the last disc.
-
-Server MessageBox: client listens/checks the API response and shows messages from the server.
-
-Replay: save the sequence of moves on server/client and play it back with a timer.
-
-🛠️ Common troubleshooting
-
-MSB3577: Two output file names resolved to the same output path — usually caused by a duplicate RESX/resource or the same logical path in two projects.
-Fix:
-
-Delete bin/ and obj/ for all projects.
-
-Ensure there aren’t two Form1.resx/Form1.resources with the same LogicalName.
-
-In the .csproj, ensure there are no duplicate <EmbeddedResource Include=...> entries.
-
-Client doesn’t connect — ensure the server is running, the port is correct (default we saw: 5221), and Firewall isn’t blocking.
-
-Dev HTTPS certificate issue — if switching to HTTPS: dotnet dev-certs https --trust.
-
-🧪 Useful commands
-# Build/clean
-dotnet clean
-dotnet build
-
-# Run
 dotnet run --project ConnectFourWeb
 dotnet run --project ConnectFourClient
 
-📜 License
+Features
 
-Consider adding a license (e.g., MIT) to the LICENSE file.
+Board & Rules (server): JSON endpoints to create a game, submit a move, and query state (routes depend on your controllers).
 
-👥 Credit
+Client UX: Column hover, disc “drop” animation (timer-based), and basic turn flow.
 
-Developed by Nir Avraham and Daniel Rubinstien.
+Extensibility: Easy to add replay, last-move highlighting, or server-driven prompts (e.g., show server messages in a MessageBox).
+
+Client (WinForms)
+
+Play: Start a game and click a column to drop a disc; the client sends moves to the server via HTTP.
+
+Animations: Frame-based disc fall using a Timer and GDI+ drawing.
+
+Blocking: Optionally disable input during “server turn” to keep flow tidy.
+
+Replay (optional): Add an in-memory/file/SQLite replay if desired.
+
+Credits
+
+Authors: Nir Avraham & Daniel Rubinstien
+
