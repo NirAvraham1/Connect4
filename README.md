@@ -10,9 +10,6 @@ Gameplay — Human client sending moves to server (baseline endpoints; extendabl
 
 Polish — Clear separation of concerns, handy troubleshooting notes, and multi-project solution setup
 
-Repository structure at a glance: ConnectFourClient/ (WinForms), ConnectFourWeb/ (Web API), packages/Newtonsoft.Json.13.0.3/, and ConnectFour.sln. GitHub shows the code is mostly C#. 
-GitHub
-
 Table of Contents
 
 Tech Stack
@@ -35,6 +32,8 @@ Client (WinForms)
 
 Credits
 
+<a id="tech-stack"></a>
+
 Tech Stack
 
 Server: .NET (ASP.NET Core Web API), JSON via Newtonsoft.Json
@@ -43,8 +42,9 @@ Client: .NET (Windows), WinForms with GDI+ (Graphics, Bitmap, Timer)
 
 Build/IDE: Visual Studio 2022 or dotnet CLI
 
-Repo Languages (GitHub): Mostly C#, with some HTML/CSS/JS. 
-GitHub
+Repo Languages: Mostly C#, with some HTML/CSS/JS
+
+<a id="folder-structure-expanded"></a>
 
 Folder Structure (expanded)
 Connect4/
@@ -70,51 +70,42 @@ Connect4/
 └─ ConnectFour.sln                     # Solution file
 
 
-Tip: If a folder isn’t there yet, consider adding it—the structure above signals good separation of concerns and makes reviewers happy. Root folders verified on GitHub. 
-GitHub
+<a id="notable-files--entry-points"></a>
 
-Notable Files & Entry Points (click these first)
+Notable Files & Entry Points
 
 Server (ASP.NET Core Web API)
 
 Controllers/GamesController.cs (or similarly named)
-Why it’s interesting: Shows [ApiController], attribute routing, status codes (201, 400, 404), and model validation. Look for DI of a game service, cancellation tokens, and returning ProblemDetails for errors.
+Exposes endpoints to create/get games; shows [ApiController], attribute routing, proper status codes, and DI of a game service.
 
 Controllers/MovesController.cs (or similar)
-Why: Encapsulates move validation (column bounds, column full, turn order), win/draw detection, and consistent responses (DTOs). Good spot to show logging breadcrumbs via ILogger.
+Handles move submission, column bounds/full checks, win/draw detection, and returns consistent DTOs. Add ILogger breadcrumbs for key actions.
 
 Data/GameDbContext.cs (or similar)
-Why: EF Core setup (entities like Player, Game, Move), relationships, indexes, and OnModelCreating. If you use migrations, this is where configurations live.
+EF Core configuration for entities like Player, Game, Move; relationships and indices in OnModelCreating.
 
 Services/GameEngine.cs (or similar)
-Why: Pure game logic (drop piece, check four-in-a-row, random move generation). Clean separation makes unit tests trivial.
+Pure game logic: drop piece, check four-in-a-row, random move generation. Easy to unit test.
 
 Filters/ApiExceptionFilter.cs (optional)
-Why: Converts exceptions to RFC 7807 ProblemDetails (uniform JSON errors) and avoids leaking stack traces.
+Converts exceptions to RFC 7807 ProblemDetails so API errors are uniform and clean.
 
 Client (WinForms)
 
 Form1.cs
-Why: Rendering quality & UX polish. Look for:
-
-Double buffering (ControlStyles.OptimizedDoubleBuffer) to prevent flicker
-
-GDI+ drawing (board grid, discs), anti-aliasing
-
-Timer-based animation for “falling disc” and hover highlight
-
-Input blocking while awaiting server turn
+Main UI: double buffering to prevent flicker, GDI+ drawing (board/discs), timer-driven “falling disc” animation, input handling, temporary input blocking during server turn.
 
 Services/ApiClient.cs
-Why: Centralized HTTP calls with base URL config, HttpClient reuse, JSON (Newtonsoft) serialization, mapping ProblemDetails to friendly messages, and small retry/backoff for transient errors.
+Central HTTP layer: base URL config, HttpClient reuse, JSON serialization (Newtonsoft), translate ProblemDetails into user-friendly messages, optional retry/backoff.
 
 Data/ReplayDbContext.cs (if present)
-Why: Local SQLite store for replays; demonstrates EF Core on the client, EnsureCreated(), and simple querying for playback screens.
+Local SQLite store for replays; shows EF Core on the client with EnsureCreated() and simple LINQ queries.
 
 Models/GameDto.cs, Models/MoveDto.cs (or similar)
-Why: Strongly typed JSON contracts, JsonPropertyName/JsonProperty usage, and separation between transport vs. UI models.
+Strongly typed JSON contracts for client–server communication.
 
-If a file above isn’t in your tree yet, adding it (even with minimal content) helps reviewers quickly see professional structure and technology depth.
+<a id="prerequisites"></a>
 
 Prerequisites
 
@@ -123,6 +114,8 @@ Windows 10/11 (for the WinForms client)
 .NET SDK 8.0+ (recommended)
 
 Visual Studio 2022 (or use the dotnet CLI)
+
+<a id="quick-start"></a>
 
 Quick Start
 # Clone
@@ -141,44 +134,56 @@ dotnet run
 cd ../ConnectFourClient
 dotnet run
 
+
+<a id="configuration"></a>
+
 Configuration
 
 Server URL: Printed on startup (e.g., http://localhost:5221).
 
-Client base URL: Configure in the client’s HTTP layer (e.g., Services/ApiClient.cs). Ensure it matches the server URL/port.
+Client base URL: Set in the client’s HTTP layer (e.g., Services/ApiClient.cs). Must match the server URL/port.
+
+<a id="running-the-projects"></a>
 
 Running the Projects
 
 Visual Studio
 
-Open ConnectFour.sln → Set Startup Projects… → Multiple → start both ConnectFourWeb & ConnectFourClient.
+Open ConnectFour.sln.
 
-F5. Confirm the client base URL points to the server.
+Set Startup Projects… → Multiple, start both ConnectFourWeb and ConnectFourClient.
+
+Run (F5). Ensure the client base URL points to the server.
 
 CLI
 
 dotnet run --project ConnectFourWeb
 dotnet run --project ConnectFourClient
 
+
+<a id="features"></a>
+
 Features
 
 Board & Rules (server): JSON endpoints to create a game, submit a move, and query state (routes depend on your controllers).
 
-Client UX: Column hover, disc “drop” animation (timer-based), and basic turn flow.
+Client UX: Column hover and smooth disc “drop” animation (timer-based).
 
-Extensibility: Easy to add replay, last-move highlighting, or server-driven prompts (e.g., show server messages in a MessageBox).
+Extensibility: Add replay, last-move highlighting, or server-driven prompts (e.g., MessageBox from API responses).
+
+<a id="client-winforms"></a>
 
 Client (WinForms)
 
-Play: Start a game and click a column to drop a disc; the client sends moves to the server via HTTP.
+Play: Start a game, click a column to drop your disc; the client posts the move to the server.
 
-Animations: Frame-based disc fall using a Timer and GDI+ drawing.
+Animations: Frame-based GDI+ drawing with a Timer for falling discs and subtle highlights.
 
-Blocking: Optionally disable input during “server turn” to keep flow tidy.
+Blocking: Optionally disable input while the server is “thinking” (responding).
 
-Replay (optional): Add an in-memory/file/SQLite replay if desired.
+<a id="credits"></a>
 
 Credits
 
-Authors: Nir Avraham & Daniel Rubinstien
+Author: Nir Avraham
 
